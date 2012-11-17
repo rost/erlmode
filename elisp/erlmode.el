@@ -27,6 +27,9 @@
 ;;; module content parsing
 (require 'erl-parse)
 
+;;; source code jumping
+(require 'erl-jump)
+
 
 (provide 'erlmode)
 
