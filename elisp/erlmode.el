@@ -15,6 +15,9 @@
 ;; setup of erlang-mode
 (require 'erl-legacy)
 
+;;; otp related setup
+(require 'erl-otp)
+
 (provide 'erlmode)
 
 ;;; erlmode.el ends here
