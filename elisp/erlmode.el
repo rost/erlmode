@@ -24,6 +24,9 @@
 ;;; module location indexing
 (require 'erl-index)
 
+;;; module content parsing
+(require 'erl-parse)
+
 
 (provide 'erlmode)
 
