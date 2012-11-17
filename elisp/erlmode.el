@@ -15,6 +15,9 @@
 ;; setup of erlang-mode
 (require 'erl-legacy)
 
+;; the regexes defined in here are needed by a couple of modules
+(require 'erlang)
+
 ;;; otp related setup
 (require 'erl-otp)
 
