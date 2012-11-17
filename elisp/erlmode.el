@@ -18,6 +18,10 @@
 ;;; otp related setup
 (require 'erl-otp)
 
+;;; module location indexing
+(require 'erl-index)
+
+
 (provide 'erlmode)
 
 ;;; erlmode.el ends here
