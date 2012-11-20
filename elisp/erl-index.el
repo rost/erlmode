@@ -105,11 +105,12 @@ result in `/home/user/otp_install/r15/lib/stdlib/src/lists.erl'."
 (defun erl--parents-of-dir (start-dir)
   "Construct a list containing `start-dir' and all of its parent
 dirs."
-  (let* ((dirs  (loop for s in (cons "/" (split-string start-dir "/" t))
-                      collect (file-name-as-directory s)))
-         (paths (loop for d on (reverse dirs) by #'cdr
-                      collect (file-name-as-directory
-                               (apply #'concat (reverse d))))))
+  (let* ((real-dir (expand-file-name start-dir))
+         (dirs     (loop for s in (cons "/" (split-string real-dir "/" t))
+                         collect (file-name-as-directory s)))
+         (paths    (loop for d on (reverse dirs) by #'cdr
+                         collect (file-name-as-directory
+                                  (apply #'concat (reverse d))))))
     (nreverse paths)))
 
 ;;; TODO: check if dired will make this faster
