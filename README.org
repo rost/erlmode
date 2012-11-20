@@ -27,6 +27,11 @@
     commas, etc.
   - Probably other things I'm forgetting now.
 
+* Bindings
+  M-.      -- jump to source
+  M-,      -- jump back from source
+  C-c C-f  -- ido file-listing of project modules
+
 * What's planned
   Apart from having a huge todo list the things closest in the future is an
   eldoc version for Erlang code and porting over auto-complete-distel and
