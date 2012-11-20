@@ -422,7 +422,7 @@ through the include files of the module."
 
 (defun erl-find-project-file ()
   (interactive)
-  (let* ((all        (erlmode-modules))
+  (let* ((all        (erl-modules))
          (candidates (erl-file-candidates all))
          (candidate  (ido-completing-read "File: " candidates))
          (file       (cdr (assoc candidate all))))
