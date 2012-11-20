@@ -21,6 +21,7 @@
 (add-to-list 'load-path (concat (erl--path-of-library "erlmode-start")
                                 "elisp"))
 
+(require 'thingatpt)
 (require 'erlmode)
 
 (provide 'erlmode-start)
