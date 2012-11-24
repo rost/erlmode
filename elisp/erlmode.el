@@ -30,6 +30,8 @@
 ;;; source code jumping
 (require 'erl-jump)
 
+;;; code completion backend
+(require 'erl-complete)
 
 (provide 'erlmode)
 
