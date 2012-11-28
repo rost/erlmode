@@ -361,7 +361,7 @@ through the include files of the module."
 (defun erl--fun-arity-function-under-point-p ()
   (save-excursion
     (beginning-of-thing 'symbol)
-    (looking-at (concat erlang-atom-regexp "\\s-*/[0-9]+[\n ,]"))))
+    (looking-at (concat erlang-atom-regexp "\\s-*/[0-9]+\\(\n\\|[\n^.]*\\)"))))
 
 (defun erl--internal-function-under-point ()
   (when (erl--internal-function-under-point-p)
