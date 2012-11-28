@@ -352,8 +352,13 @@ through the include files of the module."
     (save-excursion
       (beginning-of-thing 'symbol)
       (let* ((filename (erl--file-name))
-             (module   (substring-no-properties filename
-                                                0 (- (length filename) 4)))
+             (module   (or (when (looking-back ":")
+                             (save-excursion
+                               (backward-char)
+                               (beginning-of-thing 'symbol)
+                               (erl--thing-at-point-no-properties-op 0)))
+                           (substring-no-properties filename
+                                                    0 (- (length filename) 4))))
              (function (erl--thing-at-point-no-properties-op 0))
              (arity    (erl--function-arity)))
         (list 'fun-arity-function (list module function arity))))))
