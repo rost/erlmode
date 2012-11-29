@@ -11,8 +11,10 @@
   for these things are in the works.
 
 * Install
+#+BEGIN_EXAMPLE
   (add-to-list 'load-path "/path/to/erlmode-root/")
   (require 'erlmode-start)
+#+END_EXAMPLE
 
 * What it gives you
   - You should not have to specify an erlang-root-dir
@@ -28,9 +30,11 @@
   - Probably other things I'm forgetting now.
 
 * Bindings
+#+BEGIN_EXAMPLE
   M-.      -- jump to source
   M-,      -- jump back from source
   C-c C-f  -- ido file-listing of project modules
+#+END_EXAMPLE
 
 * What's planned
   Apart from having a huge todo list the things closest in the future is an
