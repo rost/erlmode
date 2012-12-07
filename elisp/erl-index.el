@@ -141,16 +141,6 @@ dirs."
   (directory-files (file-name-as-directory directory) t "^[^.]" t))
 
 ;;;_+ setup --------------------------------------------------------------------
-(defun erl--setup-otp-module-index ()
-  "Create index for OTP modules if we know the OTP install dir."
-  (when erlang-root-dir
-    (erl-otp-modules)))
-
-;; Setup OTP module index upon loading erlang.el
-(eval-after-load 'erlang
-  '(progn
-     (erl--setup-otp-module-index)))
-
 (defun erl--setup-project-module-index ()
   "Create index for project modules unless we already have one."
   (unless (erl-modules-cache-p)
