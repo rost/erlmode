@@ -16,6 +16,11 @@
   (require 'erlmode-start)
 #+END_EXAMPLE
 
+  To activate the auto-complete-mode integration:
+#+BEGIN_EXAMPLE
+  (require 'ac-erlmode)
+#+END_EXAMPLE
+
 * What it gives you
   - You should not have to specify an erlang-root-dir
   - You will have automagic 'tags' support, using M-. and M-, you will be able
