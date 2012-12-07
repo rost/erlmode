@@ -26,32 +26,34 @@
 ;;;_+ API ----------------------------------------------------------------------
 (defun erl-modules ()
   "Return list of modules in cache for current project."
-  (or (cdr (assoc (erl--find-project-root) erl-modules-index-cache))
-      (erl--update-modules-index-cache)
-      erl-modules-index-cache))
+  (or (assoc (intern (erl--find-project-root)) erl-modules-index-cache)
+      (erl--update-modules-index-cache)))
 
 (defun erl-modules-cache-p ()
   "Do we have a cache for current project."
-  (if (cdr (assoc (erl--find-project-root) erl-modules-index-cache))
+  (if (cdr (assoc (intern (erl--find-project-root)) erl-modules-index-cache))
       t
-      nil))
+    nil))
 
 ;;; TODO: This just prepends a new index to the cache list, remove the old
 ;;; index as well
 (defun erl--update-modules-index-cache ()
   "Update module cache for current project."
   (interactive)
-  (message "Updating project module cache ...")
-  (let* ((root-dir (erl--find-project-root))
-         (file-re  ".[eh]rl$")
-         (cache    (erl-module-index-under-path root-dir file-re)))
-    (setq erl-modules-index-cache (cons cache erl-modules-index-cache))))
-
-(defun erl-otp-modules ()
-  "Return list of all indexed OTP Erlang modules."
-  (or erl-otp-modules-index-cache
-      (setq erl-otp-modules-index-cache
-            (erl-module-index-under-path erlang-root-dir ".[eh]rl$"))))
+  (message "Updating module cache ...")
+  (let* ((prj-dir      (erl--find-project-root))
+         (key          (intern prj-dir))
+         (prj-file-re  "\\(.eterm\\|.app.src\\|.[eh]rl$\\)")
+         (otp-dir      (erl--otp-root-dir))
+         (otp-file-re  ".[eh]rl$")
+         (cache    (nconc (erl-module-index-under-path prj-dir prj-file-re)
+                          (erl-module-index-under-path otp-dir otp-file-re))))
+    (when (assoc key erl-modules-index-cache)
+      (setq erl-modules-index-cache
+            (assq-delete-all key erl-modules-index-cache)))
+    (message "Done.")
+    (setq erl-modules-index-cache
+          (cons (cons key cache) erl-modules-index-cache))))
 
 (defun erl-otp-c-modules ()
   "Return list of all indexed OTP C modules."
@@ -62,8 +64,7 @@
 (defun erl--module-file-location (module)
   "Return full path of `module'. E.g. `lists.erl' passed in will
 result in `/home/user/otp_install/r15/lib/stdlib/src/lists.erl'."
-  (cdr (or (assoc module (erl-modules))
-           (assoc module (erl-otp-modules)))))
+  (cdr (assoc module (erl-modules))))
 
 (defun erl--path-of-module (module)
   "Return full path of `module'."
@@ -75,9 +76,8 @@ result in `/home/user/otp_install/r15/lib/stdlib/src/lists.erl'."
   "Return list of all files matching `file-re' under `path'."
   (let* ((root-dir path)
          (files    (erl--find-files-in-tree root-dir file-re))
-         (pairs    (loop for f in files collect (erl--path-to-kv-pair f)))
-         (cache    (cons root-dir pairs)))
-    cache))
+         (pairs    (loop for f in files collect (erl--path-to-kv-pair f))))
+    pairs))
 
 (defun erl--path-to-kv-pair (path)
   "Convert path to cons cell with filename of the path as key:
@@ -89,7 +89,8 @@ result in `/home/user/otp_install/r15/lib/stdlib/src/lists.erl'."
 (defun erl--find-project-root ()
   "Find project root for current location."
   (let* ((dirs (erl--parents-of-dir default-directory)))
-    (find-if #'erl--dir-is-project-root dirs)))
+    (or (find-if #'erl--dir-is-project-root dirs)
+        (find-if #'erl--dir-is-otp-root dirs))))
 
 (defvar erl-project-root-file-re
   "\\(rebar.config\\|Makefile\\|Emakefile\\|\.gitignore\\)"
@@ -99,6 +100,9 @@ result in `/home/user/otp_install/r15/lib/stdlib/src/lists.erl'."
 (defun erl--dir-is-project-root (dir)
   "Determine if `dir' contains a project root file."
   (directory-files dir nil erl-project-root-file-re))
+
+(defun erl--dir-is-otp-root (dir)
+  (string-equal erlang-root-dir dir))
 
 ;;; TODO: Make it fallback to ../ as project dir if we are standing in an
 ;;; otp dir layout dir, src/, test/, priv/, etc.
