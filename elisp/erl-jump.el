@@ -210,7 +210,8 @@ jumps to the file."
 `module'. The types for now are macros and record.  Searches the
 current module and if it can't find the definition there looks
 through the include files of the module."
-  (let* ((internal (erl--find-symbol-in-module type symbol module))
+  (let* ((filepath (erl--module-file-location module))
+         (internal (erl--find-symbol-in-module type symbol module))
          (external (unless internal
                      (let* ((paths    (erl--module-header-file-paths))
                             (location (erl--find-symbol-in-modules
