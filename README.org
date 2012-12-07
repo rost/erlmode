@@ -68,6 +68,7 @@
 
 * Manifest
   contrib/              -- Various extras
+  contrib/ac-erlmode.el -- auto-complete-mode integration
   erlang-mode/          -- OTP erlang-mode modules
   elisp/erl-complete.el -- Completion backend
   elisp/erl-helpers.el  -- Various helper functions
