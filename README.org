@@ -67,6 +67,7 @@
   Most likely lots of them.
 
 * Manifest
+#+BEGIN_EXAMPLE
   contrib/              -- Various extras
   contrib/ac-erlmode.el -- auto-complete-mode integration
   contrib/he-erlmode.el -- hippie-expand integration
@@ -80,3 +81,4 @@
   elisp/erl-otp.el      -- Find OTP installation and setup paths
   elisp/erl-parse.el    -- Parse files for source definitions
   erlmode-start.el      -- Main module from where everything is loaded
+#+END_EXAMPLE
