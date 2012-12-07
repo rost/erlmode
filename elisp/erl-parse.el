@@ -70,19 +70,22 @@ E.g. `((\"module\" . \"modname\") (\"behaviour\" . \"gen_server\"))'"
   "Compose list of function definitions and their locations in
 cells on the form: ((function1 . `point'))."
   (save-excursion
-    (find-file file)
-    (goto-char (point-min))
-    (let* ((re (concat "^" erlang-atom-regexp "\\s-*("))
-           (functions nil))
-      (while (re-search-forward re nil t)
-        (backward-char)
-        (let* ((module   (erl--module-name))
-               (function (match-string-no-properties 1))
-               (arity    (erl--function-arity))
-               (cell     (list module function arity))
-               (location (save-excursion (beginning-of-line) (point))))
-          (push (cons cell location) functions)))
-      (nreverse functions))))
+    (let ((live (buffer-live-p (get-buffer (file-name-nondirectory file)))))
+      (find-file file)
+      (goto-char (point-min))
+      (let* ((re (concat "^" erlang-atom-regexp "\\s-*("))
+             (functions nil))
+        (while (re-search-forward re nil t)
+          (backward-char)
+          (let* ((module   (erl--module-name))
+                 (function (match-string-no-properties 1))
+                 (arity    (erl--function-arity))
+                 (cell     (list module function arity))
+                 (location (save-excursion (beginning-of-line) (point))))
+            (push (cons cell location) functions)))
+        (unless live
+          (kill-buffer (current-buffer)))
+        (nreverse functions)))))
 
 ;;;_* Form parsing -------------------------------------------------------------
 
