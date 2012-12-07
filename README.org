@@ -65,3 +65,15 @@
 
 * Bugs?
   Most likely lots of them.
+
+* Manifest
+  contrib/              -- Various extras
+  erlang-mode/          -- OTP erlang-mode modules
+  elisp/erl-helpers.el  -- Various helper functions
+  elisp/erl-index.el    -- Find project roots and index relevant files
+  elisp/erl-jump.el     -- Find source definitions and navigate to them
+  elisp/erl-legacy.el   -- Setup of erlang-mode
+  elisp/erlmode.el      --
+  elisp/erl-otp.el      -- Find OTP installation and setup paths
+  elisp/erl-parse.el    -- Parse files for source definitions
+  erlmode-start.el      -- Main module from where everything is loaded
