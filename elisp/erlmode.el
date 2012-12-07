@@ -32,6 +32,7 @@
 
 ;;; code completion backend
 (require 'erl-complete)
+(require 'he-erlmode)
 
 (provide 'erlmode)
 
