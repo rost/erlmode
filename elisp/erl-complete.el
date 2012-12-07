@@ -138,7 +138,7 @@
   "List of symbols of `type' in `module' and its included headers."
   (let* ((filepath (erl--module-file-location (erl--module-file-name module)))
          (local    (erl--symbol-names-in-file filepath type))
-         (headers  (erl--module-header-file-paths))
+         (headers  (erl--module-header-file-paths filepath))
          (included (loop for h in headers
                          nconc (erl--symbol-names-in-file h type))))
     (nconc local included)))

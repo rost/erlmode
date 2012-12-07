@@ -170,17 +170,6 @@ jumps to the file."
     (find-file file)
     (goto-char (point-min))))
 
-;;;_+ header files -------------------------------------------------------------
-
-(defun erl--module-header-file-paths ()
-  "Return list of filepaths to all header files included by module."
-  (let* ((raw     (mapcar #'cadr (erl-module-forms (erl--file-name) 'include)))
-         (headers (loop for r in raw nconc (last (split-string r "/"))))
-         (all-files  (erl-modules))
-         (file-paths (loop for file in headers
-                           collect (cdr (assoc file all-files)))))
-    file-paths))
-
 ;;;_+ macros -------------------------------------------------------------------
 
 (defun erl--jump-to-macro-definition (symbol)
@@ -215,7 +204,7 @@ through the include files of the module."
   (let* ((filepath (erl--module-file-location module))
          (internal (erl--find-symbol-in-module type symbol module))
          (external (unless internal
-                     (let* ((paths    (erl--module-header-file-paths))
+                     (let* ((paths    (erl--module-header-file-paths filepath))
                             (location (erl--find-symbol-in-modules
                                        type symbol paths)))
                        location))))

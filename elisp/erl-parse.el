@@ -87,6 +87,19 @@ cells on the form: ((function1 . `point'))."
           (kill-buffer (current-buffer)))
         (nreverse functions)))))
 
+(defun erl--module-header-file-paths (file)
+  "Return list of filepaths to all header files included by module."
+  (save-excursion
+    (let ((live (buffer-live-p (get-buffer (file-name-nondirectory file)))))
+      (find-file file)
+      (goto-char (point-min))
+      (let* ((raw (mapcar #'cadr (erl-module-forms (erl--file-name) 'include)))
+             (headers (loop for r in raw nconc (last (split-string r "/"))))
+             (files        (cdr (erl-modules)))
+             (header-paths (loop for file in headers
+                                 collect (cdr (assoc file files)))))
+        header-paths))))
+
 ;;;_* Form parsing -------------------------------------------------------------
 
 (defun erl--parse-module (module)
