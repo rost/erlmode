@@ -426,7 +426,7 @@ through the include files of the module."
 
 ;;;_* miscellaneous ------------------------------------------------------------
 (defun erl-file-candidates (modules)
-  (loop for m in modules collect (car m)))
+  (loop for m in modules when (consp m) collect (car m)))
 
 (defun erl-find-project-file ()
   (interactive)
