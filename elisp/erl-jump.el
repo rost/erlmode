@@ -172,10 +172,10 @@ jumps to the file."
 
 (defun erl--module-header-file-paths ()
   "Return list of filepaths to all header files included by module."
-  (let* ((raw   (mapcar #'cadr (erl-module-forms (erl--file-name) 'include)))
-         (files (loop for r in raw nconc (last (split-string r "/"))))
-         (all-files  (append (erl-modules) (erl-otp-modules)))
-         (file-paths (loop for file in files
+  (let* ((raw     (mapcar #'cadr (erl-module-forms (erl--file-name) 'include)))
+         (headers (loop for r in raw nconc (last (split-string r "/"))))
+         (all-files  (erl-modules))
+         (file-paths (loop for file in headers
                            collect (cdr (assoc file all-files)))))
     file-paths))
 
