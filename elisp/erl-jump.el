@@ -166,9 +166,11 @@
 jumps to the file."
   (let* ((header (file-name-nondirectory path))
          (file   (erl--module-file-location header)))
-    (erl--jump-store-location file)
-    (find-file file)
-    (goto-char (point-min))))
+    (if (not file)
+        (message "Can't find path for header: %s" header)
+      (erl--jump-store-location file)
+      (find-file file)
+      (goto-char (point-min)))))
 
 ;;;_+ macros -------------------------------------------------------------------
 
