@@ -32,6 +32,14 @@
     - modules
   - Some indentation fixes and breakages for nicely aligning various parens and
     commas, etc.
+  - auto-complete-mode integration. Somewhat context aware. Completion of:
+    - functions (local, external, imported, internal and external bifs)
+    - records
+    - macros
+    - modules
+    - keywords and operators
+  - hippie-expand integration. Not as context aware. Completion of:
+    - external functions and external bifs
   - Probably other things I'm forgetting now.
 
 * Bindings
@@ -43,8 +51,7 @@
 
 * What's planned
   Apart from having a huge todo list the things closest in the future is an
-  eldoc version for Erlang code and porting over auto-complete-distel and
-  hippie-expand-distel to use erlmode code for completion.
+  eldoc version for Erlang code.
   
 ** Erlang VM runtime interaction
    Elisp parts of Distel that is needed for communicating with an Erlang node
