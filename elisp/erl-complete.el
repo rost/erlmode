@@ -29,8 +29,10 @@
          (list 'external-function (erl--complete-type-mf-symbol)))
         ((erl--complete-type-typedef-p)
          (list 'type))
+        ((erl--complete-type-generic-p)
+         (list 'generic-symbol (erl--complete-type-generic-symbol)))
         (t
-         'internal-function)))
+         'unrecognized)))
 
 (defun erl--complete-type-macro-p ()
   "Determine if symbol before point is a macro."
@@ -66,12 +68,23 @@
   "Determine if a typedef completion is possible."
   (looking-back "::[\\s *]+"))
 
+(defun erl--complete-type-generic-p ()
+  "Determine generic completion as being everything except the
+special cases."
+  (and (not (erl--complete-type-macro-p))
+       (not (erl--complete-type-record-p))
+       (not (erl--complete-type-mf-p))))
+
 (defun erl--complete-type-macro-symbol ()
   "Return module name and beginning of macro to complete."
   (erl--complete-symbol))
 
 (defun erl--complete-type-record-symbol ()
   "Return module name and beginning of record to complete."
+  (erl--complete-symbol))
+
+(defun erl--complete-type-generic-symbol ()
+  "Return module name and beginning of symbol to complete."
   (erl--complete-symbol))
 
 (defun erl--complete-symbol ()
@@ -85,8 +98,51 @@
     (case type
       ('define            (erl--module-macro-names  module))
       ('record            (erl--module-record-names module))
-      ('internal-function (erl--module-internal-function-names module))
-      ('external-function (erl--module-exported-function-names module)))))
+      ('external-function (erl--module-exported-function-names module))
+      ('generic-symbol    (erl--module-generic-symbol-names module)))))
+
+;;;_* Generic candidates -------------------------------------------------------
+(defun erl--module-generic-symbol-names (module)
+  (let* ((file (erl--module-file-location (erl--module-file-name module)))
+         (keywords  (erl--erlang-keywords))
+         (operators (erl--erlang-operators))
+         (modules   (erl--modules-candidates))
+         (functions (erl--module-internal-function-names module)))
+    (nconc keywords operators modules functions)))
+
+(defun erl--erlang-keywords ()
+  "List of Erlang keywords."
+  (list "after"
+        "begin"
+        "catch"
+        "case"
+        "cond"
+        "end"
+        "fun"
+        "if"
+        "let"
+        "of"
+        "query"
+        "receive"
+        "try"
+        "when"))
+
+(defun erl--erlang-operators ()
+  "List of Erlang operators."
+  (list "and"
+        "andalso"
+        "band"
+        "bnot"
+        "bor"
+        "bsl"
+        "bsr"
+        "bxor"
+        "div"
+        "not"
+        "or"
+        "orelse"
+        "rem"
+        "xor"))
 
 ;;;_* Function candidates ------------------------------------------------------
 
@@ -160,7 +216,11 @@
 
 ;;;_+ Module candidates --------------------------------------------------------
 (defun erl--modules-candidates ()
-  "List of modules in project.")
+  "List of modules in project."
+  (loop for m in (erl-modules)
+        when (consp m)
+        when (string-equal (file-name-extension (car m)) "erl")
+        collect (erl--module-name-trim-extension (car m))))
 
 ;;;_+ Variable candidates ------------------------------------------------------
 
