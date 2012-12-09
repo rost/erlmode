@@ -33,10 +33,12 @@
          'internal-function)))
 
 (defun erl--complete-type-macro-p ()
+  "Determine if symbol before point is a macro."
   (or (looking-back "?")
       (looking-back (concat "?" erlang-atom-regexp))))
 
 (defun erl--complete-type-record-p ()
+  "Determine if symbol before point is a record."
   (or (looking-back "#")
       (looking-back (concat "#" erlang-atom-regexp))))
 
@@ -65,12 +67,15 @@
   (looking-back "::[\\s *]+"))
 
 (defun erl--complete-type-macro-symbol ()
+  "Return module name and beginning of macro to complete."
   (erl--complete-symbol))
 
 (defun erl--complete-type-record-symbol ()
+  "Return module name and beginning of record to complete."
   (erl--complete-symbol))
 
 (defun erl--complete-symbol ()
+  "Return module name and beginning of symbol to complete."
   (list (erl--module-name) (erl--thing-at-point-no-properties-op 0)))
 
 ;;;_+ Candidates ---------------------------------------------------------------
