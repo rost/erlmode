@@ -37,6 +37,9 @@
 (defun erl--module-file-name (&optional module)
   (concat (or module (erl--module-name)) ".erl"))
 
+(defun erl--module-name-to-filepath (module)
+  (erl--module-file-location (erl--module-file-name module)))
+
 (defun erl--file-name ()
   (file-name-nondirectory (buffer-name)))
 
