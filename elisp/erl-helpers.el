@@ -34,6 +34,9 @@
 (defun erl--module-name ()
   (file-name-nondirectory (substring-no-properties (buffer-name) 0 -4)))
 
+(defun erl--module-name-trim-extension (module)
+  (substring-no-properties module 0 -4))
+
 (defun erl--module-file-name (&optional module)
   (concat (or module (erl--module-name)) ".erl"))
 
