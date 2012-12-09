@@ -27,8 +27,8 @@
          (list 'record (erl--complete-type-record-symbol)))
         ((erl--complete-type-mf-p)
          (list 'external-function (erl--complete-type-mf-symbol)))
-        ((looking-back "::[\\s *]+")
-         'type)
+        ((erl--complete-type-typedef-p)
+         (list 'type))
         (t
          'internal-function)))
 
@@ -59,6 +59,10 @@
                        (erl--thing-at-point-no-properties-op 0)))))
          (function (erl--thing-at-point-no-properties-op 0)))
     (list module function)))
+
+(defun erl--complete-type-typedef-p ()
+  "Determine if a typedef completion is possible."
+  (looking-back "::[\\s *]+"))
 
 (defun erl--complete-type-macro-symbol ()
   (erl--complete-symbol))
