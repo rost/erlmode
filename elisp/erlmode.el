@@ -11,6 +11,9 @@
 
 (require 'erl-helpers)
 
+;; add contrib dir to load-path
+(add-to-list 'load-path (concat (erl--path-of-library "erlmode") "contrib"))
+
 ;;;_* erlmode ==================================================================
 ;; setup of erlang-mode
 (require 'erl-legacy)
