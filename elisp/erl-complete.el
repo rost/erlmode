@@ -147,6 +147,8 @@ special cases."
 ;;;_* Function candidates ------------------------------------------------------
 
 ;;;_+ External functions candidates --------------------------------------------
+;; TODO: For at least lists.erl a couple of exported functions are actually
+;; bifs, add special case to handle this
 (defun erl--module-exported-function-names (module)
   "List of exported functions in `file'."
   (if (string= "erlang" module)
