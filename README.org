@@ -80,17 +80,17 @@
 
 * Manifest
 #+BEGIN_EXAMPLE
-  contrib/              -- Various extras
-  contrib/ac-erlmode.el -- auto-complete-mode integration
-  contrib/he-erlmode.el -- hippie-expand integration
-  erlang-mode/          -- OTP erlang-mode modules
-  elisp/erl-complete.el -- Completion backend
-  elisp/erl-helpers.el  -- Various helper functions
-  elisp/erl-index.el    -- Find project roots and index relevant files
-  elisp/erl-jump.el     -- Find source definitions and navigate to them
-  elisp/erl-legacy.el   -- Setup of erlang-mode
-  elisp/erlmode.el      --
-  elisp/erl-otp.el      -- Find OTP installation and setup paths
-  elisp/erl-parse.el    -- Parse files for source definitions
-  erlmode-start.el      -- Main module from where everything is loaded
+  elisp/contrib/              -- Various extras
+  elisp/contrib/ac-erlmode.el -- auto-complete-mode integration
+  elisp/contrib/he-erlmode.el -- hippie-expand integration
+  elisp/erlang-mode/          -- OTP erlang-mode modules
+  elisp/erl-complete.el       -- Completion backend
+  elisp/erl-helpers.el        -- Various helper functions
+  elisp/erl-index.el          -- Find project roots and index relevant files
+  elisp/erl-jump.el           -- Find source definitions and navigate to them
+  elisp/erl-legacy.el         -- Setup of erlang-mode
+  elisp/erlmode.el            --
+  elisp/erl-otp.el            -- Find OTP installation and setup paths
+  elisp/erl-parse.el          -- Parse files for source definitions
+  erlmode-start.el            -- Main module from where everything is loaded
 #+END_EXAMPLE
