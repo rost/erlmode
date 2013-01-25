@@ -37,6 +37,33 @@
 (require 'erl-complete)
 (require 'he-erlmode)
 
+(define-derived-mode erlmode
+  erlang-mode "Erlmode"
+  "Enhanced mode for Erlang based on Erlang-mode"
+
+  (if (fboundp 'run-mode-hooks)
+      (progn
+          (run-mode-hooks 'erlmode-mode-hook))
+    (run-hooks 'erlmode-mode-hook)))
+
+;;
+;; Associate files extensions ".erl" and ".hrl" with erlmode.
+;;
+
+(let ((a '("\\.erl\\'" . erlmode))
+      (b '("\\.hrl\\'" . erlmode)))
+  (or (assoc (car a) auto-mode-alist)
+      (setq auto-mode-alist (cons a auto-mode-alist)))
+  (or (assoc (car b) auto-mode-alist)
+      (setq auto-mode-alist (cons b auto-mode-alist))))
+
+;;
+;; Associate files using interpreter "escript" with Erlang mode.
+;;
+
+(add-to-list 'interpreter-mode-alist (cons "escript" 'erlmode))
+
+
 (provide 'erlmode)
 
 ;;; erlmode.el ends here

@@ -21,6 +21,21 @@
   (require 'ac-erlmode)
 #+END_EXAMPLE
 
+  You must have auto-complete mode installed in emacs. You can do this
+  manually via the directions at [[http://cx4a.org/software/auto-complete][the auto-complete site]]. You can also
+  do this automatically via [[http://melpa.milkbox.net][ELPA/MELPA]].
+
+  If you do it via ELPA, be aware that your require statement for
+  ac-erlmode must happen *after* ELPA mode is loaded and this happens
+  your .emacs file is loaded. So it is safest to add that require mode
+  to your erlmode hook.You can do that in the following way.
+
+#+BEGIN_EXAMPLE
+  (defun my-erlmode-mode-hook ()
+    (require 'ac-erlmode))
+
+  (add-hook 'erlmode-mode-hook 'my-erlmode-mode-hook)
+#+END_EXAMPLE
 * What it gives you
   - You should not have to specify an erlang-root-dir
   - You will have automagic 'tags' support, using M-. and M-, you will be able
@@ -52,7 +67,7 @@
 * What's planned
   Apart from having a huge todo list the things closest in the future is an
   eldoc version for Erlang code.
-  
+
 ** Erlang VM runtime interaction
    Elisp parts of Distel that is needed for communicating with an Erlang node
    will be moved over into erlmode to provide a way of communicating with a node

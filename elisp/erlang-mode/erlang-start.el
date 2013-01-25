@@ -39,7 +39,7 @@
 ;;
 ;; Please state as exactly as possible:
 ;;    - Version number of Erlang Mode (see the menu), Emacs, Erlang,
-;;	and of any other relevant software.
+;;      and of any other relevant software.
 ;;    - What the expected result was.
 ;;    - What you did, preferably in a repeatable step-by-step form.
 ;;    - A description of the unexpected result.
@@ -60,7 +60,7 @@
 ;;
 
 (autoload 'erlang-mode "erlang" "Major mode for editing Erlang code." t)
-(autoload 'erlang-version "erlang" 
+(autoload 'erlang-version "erlang"
   "Return the current version of Erlang mode." t)
 (autoload 'erlang-shell "erlang" "Start a new Erlang shell." t)
 (autoload 'run-erlang "erlang" "Start a new Erlang shell." t)
@@ -68,7 +68,7 @@
 (autoload 'erlang-compile "erlang"
   "Compile Erlang module in current buffer." t)
 
-(autoload 'erlang-man-module "erlang" 
+(autoload 'erlang-man-module "erlang"
   "Find manual page for MODULE." t)
 (autoload 'erlang-man-function "erlang"
   "Find manual page for NAME, where NAME is module:function." t)
@@ -77,24 +77,6 @@
   "Like `find-tag'.  Capable of retreiving Erlang modules.")
 (autoload 'erlang-find-tag-other-window "erlang"
   "Like `find-tag-other-window'.  Capable of retreiving Erlang modules.")
-
-
-;;
-;; Associate files extensions ".erl" and ".hrl" with Erlang mode.
-;;
-
-(let ((a '("\\.erl\\'" . erlang-mode))
-      (b '("\\.hrl\\'" . erlang-mode)))
-  (or (assoc (car a) auto-mode-alist)
-      (setq auto-mode-alist (cons a auto-mode-alist)))
-  (or (assoc (car b) auto-mode-alist)
-      (setq auto-mode-alist (cons b auto-mode-alist))))
-
-;;
-;; Associate files using interpreter "escript" with Erlang mode.
-;; 
-
-(add-to-list 'interpreter-mode-alist (cons "escript" 'erlang-mode))
 
 ;;
 ;; Ignore files ending in ".jam", ".vee", and ".beam" when performing
@@ -105,10 +87,10 @@
   (while erl-ext
     (let ((cie completion-ignored-extensions))
       (while (and cie (not (string-equal (car cie) (car erl-ext))))
-	(setq cie (cdr cie)))
+        (setq cie (cdr cie)))
       (if (null cie)
-	  (setq completion-ignored-extensions
-		(cons (car erl-ext) completion-ignored-extensions))))
+          (setq completion-ignored-extensions
+                (cons (car erl-ext) completion-ignored-extensions))))
     (setq erl-ext (cdr erl-ext))))
 
 

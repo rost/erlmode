@@ -136,10 +136,10 @@
                      ac-source-erl-keyword
                      ac-source-erl-operator
                      ac-source-erl-modules))
-  (define-key erlang-mode-map (kbd "C-M-i") 'auto-complete)
+  (define-key erlmode-map (kbd "C-M-i") 'auto-complete)
   (auto-complete-mode))
 
-(add-hook 'erlang-mode-hook 'ac-erlmode-setup)
+(add-hook 'erlmode-mode-hook 'ac-erlmode-setup)
 
 (provide 'ac-erlmode)
 
