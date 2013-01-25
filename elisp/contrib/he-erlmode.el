@@ -43,7 +43,7 @@
   (add-to-list 'hippie-expand-try-functions-list
                'try-expand-erlmode-complete-external-call))
 
-(add-hook 'erlang-mode-hook 'turn-on-hippie-expand-erlmode)
+(add-hook 'erlmode-mode-hook 'turn-on-hippie-expand-erlmode)
 
 (provide 'he-erlmode)
 
