@@ -2,7 +2,7 @@
 
 ;; -*- coding: utf-8; lexical-binding: t -*-
 
-;; Commentary:
+;;; Commentary:
 ;; A new and in time hopefully better major-mode for editing Erlang.
 
 ;;; Code:
