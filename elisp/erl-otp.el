@@ -8,32 +8,32 @@
 
 ;; Code:
 
-(defun erl--otp-root-dir ()
+(defun erl--find-otp-root-dir ()
   "Find OTP root dir. Look for true path of `erl' executable to
 find the OTP install path."
-  (let ((bin (erl--find-erl-executable-op)))
+  (let ((bin (erl--find-erl-executable)))
     (if bin
         (let ((dir (file-name-directory (file-truename bin))))
           (file-name-as-directory (expand-file-name (concat dir "..")))))))
 
-(defun erl--otp-man-dir ()
+(defun erl--find-otp-man-dir ()
   "Find OTP dir for man pages."
-  (let ((basedir (erl--otp-root-dir)))
+  (let ((basedir (erl--find-otp-root-dir)))
     (if basedir
         (file-name-as-directory (concat basedir "man")))))
 
-(defun erl--find-erl-executable-op ()
+(defun erl--find-erl-executable ()
   "Return path of `erl' executable or `nil'. If the executable
 can't be found, add $PATH from the user's login shell to exec-path
 and retry."
   (let ((bin (executable-find "erl")))
     (if (null bin)
-        (let ((path (erl--user-login-shell-path-op)))
-          (erl--add-path-string-to-exec-path-op path)
+        (let ((path (erl--collect-user-shell-paths)))
+          (erl--add-path-string-to-exec-path path)
           (executable-find "erl"))
       bin)))
 
-(defun erl--add-path-string-to-exec-path-op (path)
+(defun erl--add-path-string-to-exec-path (path)
   "SE: Split a $PATH string and add entries to exec-path."
   (let ((paths (split-string path ":")))
     (loop for p in paths
@@ -43,17 +43,17 @@ and retry."
 (defvar erl--login-shell-rc-files '("~/.profile" "~/.bashrc" "~/.zshrc")
   "Default shell rc files to look for paths in.")
 
-(defun erl--user-login-shell-path-op ()
+(defun erl--collect-user-shell-paths ()
   "SE: Hackishly get the user's path from the regular login
 shell. Depending on how Emacs is started, we might not have
 access to the full $PATH."
   (let* ((files erl--login-shell-rc-files)
          (paths (loop for file in files
-                      collect (erl--shell-path-for-file-op file)))
-         (path  (erl--shell-path-combine paths)))
+                      collect (erl--extract-shell-file-path file)))
+         (path  (erl--combine-shell-paths paths)))
     path))
 
-(defun erl--shell-path-for-file-op (file)
+(defun erl--extract-shell-file-path (file)
   "SE: Return login shell $PATH of file."
   (let* ((cmd  (format "source %s &>/dev/null && printf $PATH" file))
          (path (shell-command-to-string cmd)))
@@ -61,7 +61,7 @@ access to the full $PATH."
         nil
       path)))
 
-(defun erl--shell-path-combine (paths)
+(defun erl--combine-shell-paths (paths)
   "Combine a list of login shell $PATH strings into a single path
 string with duplicates removed."
   (let* ((split    (loop for path in paths
@@ -73,11 +73,11 @@ string with duplicates removed."
 ;;;_+ setup --------------------------------------------------------------------
 (defun erl--set-otp-root-dir ()
   "SE: Set the root path of the found OTP install."
-  (setq erlang-root-dir (erl--otp-root-dir)))
+  (setq erlang-root-dir (erl--find-otp-root-dir)))
 
 (defun erl--set-otp-man-dir ()
   "SE: Set the man path of the found OTP install."
-  (setq erlang-man-root-dir (erl--otp-man-dir)))
+  (setq erlang-man-root-dir (erl--find-otp-man-dir)))
 
 (defun erl--setup-otp-dir-paths ()
   "Setup OTP related paths."

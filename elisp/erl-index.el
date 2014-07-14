@@ -44,7 +44,7 @@
   (let* ((prj-dir      (erl--find-project-root))
          (key          (intern prj-dir))
          (prj-file-re  "\\(.eterm\\|.app.src\\|.[eh]rl$\\)")
-         (otp-dir      (erl--otp-root-dir))
+         (otp-dir      erlang-root-dir)
          (otp-file-re  ".[eh]rl$")
          (cache    (nconc (erl-module-index-under-path prj-dir prj-file-re)
                           (erl-module-index-under-path otp-dir otp-file-re))))
