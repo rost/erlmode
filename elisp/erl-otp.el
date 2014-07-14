@@ -7,6 +7,15 @@
 ;; Try to automagically figure out where the otp root-dir is located.
 
 ;; Code:
+;; Definitions
+(defvar erlang-otp-erl-bin nil
+  "OTP `erl' binary path.")
+
+(defvar erlang-otp-root-dir nil
+  "OTP root directory path.")
+
+(defvar erlang-otp-man-dir nil
+  "OTP man directory path.")
 
 (defun erl--find-otp-root-dir ()
   "Find OTP root dir. Look for true path of `erl' executable to
@@ -71,13 +80,18 @@ string with duplicates removed."
     combined))
 
 ;;;_+ setup --------------------------------------------------------------------
+(defun erl--set-otp-erl-bin ()
+  "Set OTP `erl' binary path."
+  (setq erlang-otp-erl-bin (erl--find-erl-executable)))
+
 (defun erl--set-otp-root-dir ()
   "SE: Set the root path of the found OTP install."
-  (setq erlang-root-dir (erl--find-otp-root-dir)))
+  (setq erlang-otp-root-dir (erl--find-otp-root-dir))
+  (setq erlang-root-dir erlang-otp-root-dir))
 
 (defun erl--set-otp-man-dir ()
   "SE: Set the man path of the found OTP install."
-  (setq erlang-man-root-dir (erl--find-otp-man-dir)))
+  (setq erlang-otp-man-dir (erl--find-otp-man-dir)))
 
 (defun erl--setup-otp-dir-paths ()
   "Setup OTP related paths."
