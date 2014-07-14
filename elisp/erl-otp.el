@@ -28,7 +28,7 @@
     (let ((bin (executable-find "erl")))
       (if bin
           bin
-        (erl--add-path-string-to-exec-path (erl--collect-user-shell-paths))
+        (erl--add-shell-paths-to-exec-path)
         (erl--find-erl-executable 'retry)))))
 
 (defun erl--find-otp-root-dir ()
@@ -62,38 +62,22 @@
                    (expand-file-name (concat otp-dir "man")))))
     man-dir))
 
-(defun erl--add-path-string-to-exec-path (path)
-  "Split a $PATH string and add entries to exec-path."
-  (let ((paths (split-string path ":")))
-    (loop for p in paths
-          do (add-to-list 'exec-path p))))
-
-(defun erl--collect-user-shell-paths ()
-  "Hackishly get the user's path from the regular login
-shell. Depending on how Emacs is started, we might not have
-access to the full $PATH."
+(defun erl--add-shell-paths-to-exec-path ()
+  "Add paths from shell config files to `exec-path'."
   (let* ((files erl-login-shell-rc-files)
-         (paths (loop for file in files
-                      collect (erl--extract-shell-file-path file)))
-         (path  (erl--combine-shell-paths paths)))
-    path))
+         (raw (loop for file in files
+                    nconc (erl--extract-shell-file-path file)))
+         (paths (remove-duplicates raw :test 'string-equal)))
+    (loop for path in paths
+          do (add-to-list 'exec-path path))))
 
 (defun erl--extract-shell-file-path (file)
-  "Return login shell $PATH of file."
+  "Extract login shell $PATH for FILE and convert to list of paths."
   (let* ((cmd  (format "source %s &>/dev/null && printf $PATH" file))
          (path (shell-command-to-string cmd)))
     (if (string-equal path "")
         nil
-      path)))
-
-(defun erl--combine-shell-paths (paths)
-  "Combine a list of login shell $PATH strings into a single path
-string with duplicates removed."
-  (let* ((split    (loop for path in paths
-                         nconc (split-string path ":")))
-         (filtered (remove-duplicates split :test 'string-equal))
-         (combined (mapconcat 'identity filtered ":")))
-    combined))
+      (split-string path ":"))))
 
 ;; setup
 (defun erl--set-otp-erl-bin ()
@@ -117,22 +101,6 @@ string with duplicates removed."
   (erl--set-otp-man-dir))
 
 (erl--setup-otp-dir-paths)
-
-;; unit tests
-(ert-deftest erl-shell-path-for-file-op-test ()
-  (let ((arg "~/.broken")
-        (exp nil))
-    (letf ((shell-command-to-string (string) nil))
-      (should (eq exp (erl--shell-path-for-file-op arg)))))
-  (let ((arg "~/.bashrc")
-        (exp "/usr/bin:/usr/sbin"))
-    (letf ((shell-command-to-string (string) "/usr/bin:/usr/sbin"))
-      (should (string= exp (erl--shell-path-for-file-op arg))))))
-
-(ert-deftest erl-shell-path-combine-test ()
-  (let ((arg      (list "/usr/bin:/usr/sbin" "/usr/local/bin:/usr/bin"))
-        (expected "/usr/sbin:/usr/local/bin:/usr/bin"))
-    (should (string= expected (erl--shell-path-combine arg)))))
 
 (provide 'erl-otp)
 ;;; erl-otp.el ends here
