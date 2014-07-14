@@ -11,6 +11,11 @@
 
 (require 'erl-helpers)
 
+;; Load erl-log logging functionality
+(require 'erl-log)
+(erl-log-info (format "%s: %s" "Loading erlmode" (current-time-string)))
+(erl-log-info "Load erlmode log module")
+
 ;; add contrib dir to load-path
 (add-to-list 'load-path (concat (erl--path-of-library "erlmode") "contrib"))
 
