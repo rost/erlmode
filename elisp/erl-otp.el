@@ -17,30 +17,50 @@
 (defvar erlang-otp-man-dir nil
   "OTP man directory path.")
 
+(defvar erl-login-shell-rc-files '("~/.profile" "~/.bashrc" "~/.zshrc")
+  "Default shell rc files to look for paths in.")
+
+;; Functions
+(defun erl--find-erl-executable (&optional retry)
+  "Find OTP erl executable and RETRY with new paths unless found."
+  (if retry
+      (executable-find "erl")
+    (let ((bin (executable-find "erl")))
+      (if bin
+          bin
+        (erl--add-path-string-to-exec-path (erl--collect-user-shell-paths))
+        (erl--find-erl-executable 'retry)))))
+
 (defun erl--find-otp-root-dir ()
-  "Find OTP root dir. Look for true path of `erl' executable to
-find the OTP install path."
-  (let ((bin (erl--find-erl-executable)))
-    (if bin
-        (let ((dir (file-name-directory (file-truename bin))))
-          (file-name-as-directory (expand-file-name (concat dir "..")))))))
+  "Find OTP root directory."
+  (erl--find-dir 'root))
 
 (defun erl--find-otp-man-dir ()
-  "Find OTP dir for man pages."
-  (let ((basedir (erl--find-otp-root-dir)))
-    (if basedir
-        (file-name-as-directory (concat basedir "man")))))
+  "Find OTP man directory."
+  (erl--find-dir 'man))
 
-(defun erl--find-erl-executable ()
-  "Return path of `erl' executable or `nil'. If the executable
-can't be found, add $PATH from the user's login shell to exec-path
-and retry."
-  (let ((bin (executable-find "erl")))
-    (if (null bin)
-        (let ((path (erl--collect-user-shell-paths)))
-          (erl--add-path-string-to-exec-path path)
-          (executable-find "erl"))
-      bin)))
+(defun erl--find-dir (dir)
+  "Find path or type DIR."
+  (let ((erl-bin (or erlang-otp-erl-bin (erl--find-erl-executable))))
+    (if (null erl-bin)
+        nil
+      (case dir
+        (root (erl--erl-bin-to-otp-root-path erl-bin))
+        (man (erl--erl-bin-to-otp-man-path erl-bin))))))
+
+(defun erl--erl-bin-to-otp-root-path (erl-bin)
+  "Translate ERL-BIN location to OTP root dir path."
+  (let* ((dir (file-name-directory (file-truename erl-bin)))
+         (otp-dir (file-name-as-directory
+                   (expand-file-name (concat dir "..")))))
+    otp-dir))
+
+(defun erl--erl-bin-to-otp-man-path (erl-bin)
+  "Translate ERL-BIN location to OTP man dir path."
+  (let* ((otp-dir (erl--erl-bin-to-otp-root-path erl-bin))
+         (man-dir (file-name-as-directory
+                   (expand-file-name (concat otp-dir "man")))))
+    man-dir))
 
 (defun erl--add-path-string-to-exec-path (path)
   "SE: Split a $PATH string and add entries to exec-path."
@@ -91,10 +111,12 @@ string with duplicates removed."
 
 (defun erl--set-otp-man-dir ()
   "SE: Set the man path of the found OTP install."
-  (setq erlang-otp-man-dir (erl--find-otp-man-dir)))
+  (setq erlang-otp-man-dir (erl--find-otp-man-dir))
+  (setq erlang-man-root erlang-otp-man-dir))
 
 (defun erl--setup-otp-dir-paths ()
   "Setup OTP related paths."
+  (erl--set-otp-erl-bin)
   (erl--set-otp-root-dir)
   (erl--set-otp-man-dir))
 
