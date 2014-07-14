@@ -266,8 +266,7 @@ creating the root directory and for naming application files."
     ("Receive After" "after"         erlang-skel-receive-after)
     ("Receive Loop"  "loop"          erlang-skel-receive-loop)
     ("Module"        "module"        erlang-skel-module)
-    ("Author"        "author"        erlang-skel-author)
-    ("Query"         "query"         erlang-skel-query)
+    ("Author"        "author"        erlang-skel-author)    
     ()
     ("Small Header"  "small-header" 
      erlang-skel-small-header erlang-skel-header)
