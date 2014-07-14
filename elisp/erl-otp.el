@@ -1,12 +1,12 @@
-;;; erlmode-otp.el --- OTP specific module
+;;; erl-otp.el --- OTP specific module
 
 ;; -*- coding: utf-8; lexical-binding: t -*-
 
-;; Commentary:
+;;; Commentary:
 ;; Module for OTP related aspects of erlmode.
 ;; Try to automagically figure out where the otp root-dir is located.
 
-;; Code:
+;;; Code:
 ;; Definitions
 (defvar erlang-otp-erl-bin nil
   "OTP `erl' binary path.")
@@ -63,27 +63,23 @@
     man-dir))
 
 (defun erl--add-path-string-to-exec-path (path)
-  "SE: Split a $PATH string and add entries to exec-path."
+  "Split a $PATH string and add entries to exec-path."
   (let ((paths (split-string path ":")))
     (loop for p in paths
           do (add-to-list 'exec-path p))))
 
-;;;_+ login shell path
-(defvar erl--login-shell-rc-files '("~/.profile" "~/.bashrc" "~/.zshrc")
-  "Default shell rc files to look for paths in.")
-
 (defun erl--collect-user-shell-paths ()
-  "SE: Hackishly get the user's path from the regular login
+  "Hackishly get the user's path from the regular login
 shell. Depending on how Emacs is started, we might not have
 access to the full $PATH."
-  (let* ((files erl--login-shell-rc-files)
+  (let* ((files erl-login-shell-rc-files)
          (paths (loop for file in files
                       collect (erl--extract-shell-file-path file)))
          (path  (erl--combine-shell-paths paths)))
     path))
 
 (defun erl--extract-shell-file-path (file)
-  "SE: Return login shell $PATH of file."
+  "Return login shell $PATH of file."
   (let* ((cmd  (format "source %s &>/dev/null && printf $PATH" file))
          (path (shell-command-to-string cmd)))
     (if (string-equal path "")
@@ -99,18 +95,18 @@ string with duplicates removed."
          (combined (mapconcat 'identity filtered ":")))
     combined))
 
-;;;_+ setup --------------------------------------------------------------------
+;; setup
 (defun erl--set-otp-erl-bin ()
   "Set OTP `erl' binary path."
   (setq erlang-otp-erl-bin (erl--find-erl-executable)))
 
 (defun erl--set-otp-root-dir ()
-  "SE: Set the root path of the found OTP install."
+  "Set the root path of the found OTP install."
   (setq erlang-otp-root-dir (erl--find-otp-root-dir))
   (setq erlang-root-dir erlang-otp-root-dir))
 
 (defun erl--set-otp-man-dir ()
-  "SE: Set the man path of the found OTP install."
+  "Set the man path of the found OTP install."
   (setq erlang-otp-man-dir (erl--find-otp-man-dir))
   (setq erlang-man-root erlang-otp-man-dir))
 
@@ -122,7 +118,7 @@ string with duplicates removed."
 
 (erl--setup-otp-dir-paths)
 
-;;;_+ unit tests ---------------------------------------------------------------
+;; unit tests
 (ert-deftest erl-shell-path-for-file-op-test ()
   (let ((arg "~/.broken")
         (exp nil))
@@ -139,5 +135,4 @@ string with duplicates removed."
     (should (string= expected (erl--shell-path-combine arg)))))
 
 (provide 'erl-otp)
-
-;;; erlmode-otp.el ends here
+;;; erl-otp.el ends here
