@@ -17,8 +17,8 @@
                                  erlang-electric-semicolon
                                  erlang-electric-newline))
 
-;; default to two spaces of indentation
-(setq erlang-indent-level 2)
+;; default to four spaces of indentation
+(setq erlang-indent-level 4)
 
 ;; associate various file extensions with erlang-mode
 (add-to-list 'auto-mode-alist '("\\.[ehyx]rl$"      . erlang-mode))
