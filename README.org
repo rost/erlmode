@@ -11,6 +11,10 @@
   for these things are in the works.
 
 * Install
+  Make sure you have the regular erlang-mode somewhere in your path. It is
+  available via the OTP install and various package.el sources.
+
+  Then:
 #+BEGIN_EXAMPLE
   (add-to-list 'load-path "/path/to/erlmode-root/")
   (require 'erlmode-start)

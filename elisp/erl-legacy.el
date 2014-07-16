@@ -1,12 +1,9 @@
 ;;; erl-legacy.el --- Major mode for editing and running Erlang
-
 ;; -*- coding: utf-8; lexical-binding: t -*-
-
+;;; Commentary:
 ;;; Code:
 
-;;;_* erlang-mode ==============================================================
-(add-to-list 'load-path (concat (erl--path-of-library "erlmode") "erlang-mode"))
-
+;; erlang-mode setup
 (require 'erlang-start)
 
 ;; use +debug_info
